@@ -2,8 +2,11 @@ package com.mnr.ecom1.controller;
 
 
 import com.mnr.ecom1.dto.AuthenticationRequest;
+import com.mnr.ecom1.dto.SignupRequest;
+import com.mnr.ecom1.dto.UserDto;
 import com.mnr.ecom1.entities.User;
 import com.mnr.ecom1.repositories.UserRepository;
+import com.mnr.ecom1.services.auth.AuthService;
 import com.mnr.ecom1.services.jwt.UserDetailServiceImpl;
 import com.mnr.ecom1.utils.JwtUtil;
 import io.jsonwebtoken.Jwt;
@@ -12,6 +15,8 @@ import lombok.RequiredArgsConstructor;
 import netscape.javascript.JSObject;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -36,6 +41,8 @@ public class Authcontroller {
 
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
+
+    private final AuthService authService;
 
     @PostMapping("/authenticate")
     public void createAuthenticationtoken(@RequestBody AuthenticationRequest authenticationRequest,
@@ -62,6 +69,16 @@ public class Authcontroller {
 
             response.addHeader(HEADER_STRING, TOKEN_PREFIX + jwt);
         }
+    }
 
+
+    @PostMapping("/sign-up")
+    public ResponseEntity<?> signupUser(@RequestBody SignupRequest signupRequest){
+        if(authService.hasUserWithEmail(signupRequest.getEmail())){
+            return new ResponseEntity<>("User Already exist", HttpStatus.NOT_ACCEPTABLE);
+
+            UserDto userDto=authService.createUser(signupRequest);
+            return new ResponseEntity<>(userDto, HttpStatus.OK);
+        }
     }
 }
