@@ -24,7 +24,7 @@ public class JwtUtil {
 //    @Value("${spring.app.jwtSecret}")
 //    private String jwtSecret;
 
-    public String getToken(String userName){
+    public String generateToken(String userName){
         //initialise claims as hashmap
         Map<String,Object> claims= new HashMap<>();
         return  createToken(claims,userName);
