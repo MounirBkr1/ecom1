@@ -21,6 +21,11 @@ public class AuthServiceImpl implements AuthService{
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 //    @Bean
+//    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+//        return new BCryptPasswordEncoder();
+//    }
+
+//    @Bean
 //    public BCryptPasswordEncoder passwordEncoder() {
 //        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 //        return bCryptPasswordEncoder;
@@ -32,7 +37,7 @@ public class AuthServiceImpl implements AuthService{
 
         user.setEmail(signupRequest.getEmail());
         user.setName(signupRequest.getName());
-        user.setPassword(new BCryptPasswordEncoder().encode(signupRequest.getEmail()));
+        user.setPassword(new BCryptPasswordEncoder().encode(signupRequest.getPassword()));
         user.setRole(UserRole.CUSTOMER);
 
         User createUser= userRepository.save(user);
@@ -52,11 +57,13 @@ public class AuthServiceImpl implements AuthService{
         User adminAccount= userRepository.findByRole(UserRole.ADMIN);
         if(null == adminAccount){
             User user=new User();
-            user.setEmail("admin@test.com");
+            user.setEmail("admin@gmail.com");
             user.setName("admin");
             user.setRole(UserRole.ADMIN);
             user.setPassword(new BCryptPasswordEncoder().encode("admin"));
             userRepository.save(user);
+
+            System.out.printf("post admin created " + user);
         }
     }
 

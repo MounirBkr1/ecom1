@@ -46,6 +46,7 @@ public class Authcontroller {
 
     private final AuthService authService;
 
+    //LOGIN
     @PostMapping("/authenticate")
     public void createAuthenticationtoken(@RequestBody AuthenticationRequest authenticationRequest,
                                           HttpServletResponse response) throws IOException, JSONException {
@@ -70,10 +71,15 @@ public class Authcontroller {
             );
 
             response.addHeader(HEADER_STRING, TOKEN_PREFIX + jwt);
+
+
+            System.out.printf("authenicated user passes***********");
+            System.out.println(optionalUser);
         }
     }
 
 
+    //SUBSCRIBE
     @PostMapping("/sign-up")
     public ResponseEntity<?> signupUser(@RequestBody SignupRequest signupRequest){
         if(authService.hasUserWithEmail(signupRequest.getEmail())){
