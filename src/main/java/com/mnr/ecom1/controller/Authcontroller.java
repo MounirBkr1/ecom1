@@ -76,9 +76,9 @@ public class Authcontroller {
     public ResponseEntity<?> signupUser(@RequestBody SignupRequest signupRequest){
         if(authService.hasUserWithEmail(signupRequest.getEmail())){
             return new ResponseEntity<>("User Already exist", HttpStatus.NOT_ACCEPTABLE);
-
-            UserDto userDto=authService.createUser(signupRequest);
-            return new ResponseEntity<>(userDto, HttpStatus.OK);
         }
+        UserDto userDto=authService.createUser(signupRequest);
+        return new ResponseEntity<>(userDto, HttpStatus.OK);
+
     }
 }
